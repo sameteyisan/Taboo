@@ -4,10 +4,10 @@ import 'package:Taboo/toplu_degisimler.dart';
 import 'package:flutter/material.dart';
 import 'package:nice_button/NiceButton.dart';
 
-var takim1Skor = 0;
-var takim2Skor = 0;
+var takim1Skor = '';
+var takim2Skor = '';
 var sirakontrol = 0;
-List<TaskModel> tumHsepsi = [];
+List<TaskModel> a = [];
 TaskModel gonderilen;
 final TodoHelper _todoHelper = TodoHelper();
 
@@ -51,16 +51,12 @@ class _SonucEkraniState extends State<SonucEkrani> {
           Colors.blue,
         ],
         onPressed: () async {
-          gonderilen = sirakontrol % 2 == 0
-              ? TaskModel(takim1: anlikpuan.toString(), takim2: '0')
-              : TaskModel(takim1: '0', takim2: anlikpuan.toString());
-          _todoHelper.insertTask(gonderilen);
-          List<dynamic> a = await _todoHelper.getAllTask();
+          a = await _todoHelper.getAllTask();
           print(a.last.takim1);
           print(a.last.takim2);
           setState(() {
-            takim1Skor = a.last.takim1;
-            takim2Skor = a.last.takim2;
+            takim1Skor = a.last.takim1.toString();
+            takim2Skor = a.last.takim2.toString();
             sirakontrol += 1;
             tabooPuan = 0;
             dogruPuan = 0;
@@ -119,8 +115,8 @@ class _SonucEkraniState extends State<SonucEkrani> {
                   buildContainer('Kazanılan Puan : $anlikpuan'),
                   buildContainer('Toplam Skor '),
                   sirakontrol % 2 == 0
-                      ? buildContainer('${(takim1Skor + anlikpuan)}')
-                      : buildContainer('${(takim1Skor + anlikpuan)}')
+                      ? buildContainer('${(takim1Skor + anlikpuan.toString())}')
+                      : buildContainer('${(takim1Skor + anlikpuan.toString())}')
                 ],
               ),
             ),

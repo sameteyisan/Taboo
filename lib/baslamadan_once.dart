@@ -114,10 +114,8 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
               text: "Oyunu Başlat",
               icon: LineAwesomeIcons.play,
               gradientColors: [
-                Colors.red,
-                Colors.green,
-                Colors.amber,
                 Colors.blue,
+                Colors.amber,
               ],
               onPressed: () {
                 if (takim1Name.text.length == 0 ||

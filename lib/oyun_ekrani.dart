@@ -12,7 +12,6 @@ var _random = Random();
 
 List<TaskModel> tumHsepsi = [];
 TaskModel gonderilen;
-final TodoHelper _todoHelper = TodoHelper();
 var anlikpuan = 0;
 var tabooPuanKacOlcak = -1;
 var dogruPuankacOlcak = 1;
@@ -33,6 +32,8 @@ class OyunEkrani extends StatefulWidget {
 class _OyunEkraniState extends State<OyunEkrani> {
   @override
   Widget build(BuildContext context) {
+    final TodoHelper _todoHelper = TodoHelper();
+
     var rnd = _random.nextInt(tabu.length);
     final Tabu tt = new Tabu.fromJson(tabu, rnd);
     return Scaffold(
@@ -127,6 +128,12 @@ class _OyunEkraniState extends State<OyunEkrani> {
                             Text('Kalan Süre : ' + time.toInt().toString()),
                         interval: Duration(seconds: 1),
                         onFinished: () {
+                          gonderilen = sirakontrol % 2 == 0
+                              ? TaskModel(
+                                  takim1: anlikpuan.toString(), takim2: '0')
+                              : TaskModel(
+                                  takim1: '0', takim2: anlikpuan.toString());
+                          _todoHelper.insertTask(gonderilen);
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

@@ -60,7 +60,6 @@ class TodoHelper {
       return TaskModel(
         takim2: tasks[i][Column_takim2],
         takim1: tasks[i][Column_takim1],
-        id: tasks[i][Column_id],
       );
     });
   }
