@@ -1,3 +1,4 @@
+import 'package:Taboo/sonuc_ekrani.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -11,8 +12,8 @@ final String Column_takim1 = "Takım1";
 final String Column_takim2 = "Takım2";
 
 class TaskModel {
-  final String takim2;
-  final String takim1;
+  final int takim2;
+  final int takim1;
   int id;
 
   TaskModel({
@@ -40,7 +41,7 @@ class TodoHelper {
     db = await openDatabase(join(await getDatabasesPath(), "databse.db"),
         onCreate: (db, version) {
       return db.execute(
-          "CREATE TABLE $tableName($Column_id INTEGER PRIMARY KEY AUTOINCREMENT,$Column_takim2 TEXT, $Column_takim1 TEXT)");
+          "CREATE TABLE $tableName($Column_id INTEGER PRIMARY KEY AUTOINCREMENT,$Column_takim2 INTEGER, $Column_takim1 INTEGER)");
     }, version: 1);
   }
 
@@ -51,6 +52,20 @@ class TodoHelper {
     } catch (_) {
       print(_);
     }
+  }
+
+  Future calculateTotal() async {
+    var result = sirakontrol % 2 == 0
+        ? await db
+            .rawQuery("SELECT SUM($Column_takim1) as Total FROM $tableName")
+        : await db
+            .rawQuery("SELECT SUM($Column_takim2) as Total FROM $tableName");
+    var xx = result.toList();
+    xx.forEach((element) {
+      sirakontrol % 2 == 0
+          ? takim1Skor = element['Total']
+          : takim2Skor = element['Total'];
+    });
   }
 
   Future<List<TaskModel>> getAllTask() async {
