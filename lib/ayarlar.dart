@@ -2,6 +2,7 @@ import 'package:Taboo/oyun_ekrani.dart';
 import 'package:Taboo/sonuc_ekrani.dart';
 import 'package:Taboo/toplu_degisimler.dart';
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:nice_button/NiceButton.dart';
 
 GlobalKey<ScaffoldState> _snackbarKey = new GlobalKey<ScaffoldState>();
@@ -19,6 +20,7 @@ class _AyarlarState extends State<Ayarlar> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
+          splashRadius: 20,
           icon: backButton,
           onPressed: () {
             Navigator.pop(context);
@@ -43,7 +45,7 @@ class _AyarlarState extends State<Ayarlar> {
         padding: const EdgeInsets.all(15),
         text: "Başlangıç Ayarlarına Dön",
         fontSize: 15,
-        icon: teamIcon.icon,
+        icon: LineAwesomeIcons.reply,
         gradientColors: [
           Colors.blue,
           Colors.amber,
@@ -71,7 +73,7 @@ class _AyarlarState extends State<Ayarlar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Oyun Bitiş Puanı'),
+              buildText('Oyun Bitiş Puanı'),
               Slider(
                   value: bitisPuani.toDouble(),
                   onChanged: (yeniBitisPuani) {
@@ -82,7 +84,7 @@ class _AyarlarState extends State<Ayarlar> {
                   divisions: 3,
                   label: "Bitiş Puanı : $bitisPuani puan"),
               buildDivider(),
-              Text('Oyun Süresi'),
+              buildText('Anlatıcı Süresi'),
               Slider(
                   activeColor: Colors.amber,
                   value: seconds.toDouble(),
@@ -94,7 +96,7 @@ class _AyarlarState extends State<Ayarlar> {
                   divisions: 4,
                   label: "Süre : $seconds saniye"),
               buildDivider(),
-              Text('Doğru Cevap Puanı'),
+              buildText('Doğru Cevap Puanı'),
               Slider(
                   activeColor: Colors.green,
                   value: dogruPuankacOlcak.toDouble(),
@@ -107,7 +109,7 @@ class _AyarlarState extends State<Ayarlar> {
                   divisions: 4,
                   label: "Doğru Cevap Puanı : +$dogruPuankacOlcak"),
               buildDivider(),
-              Text('Tabuu Puanı'),
+              buildText('Tabu Puanı'),
               Slider(
                   activeColor: Colors.red,
                   value: tabooPuanKacOlcak.toDouble(),
@@ -118,11 +120,13 @@ class _AyarlarState extends State<Ayarlar> {
                   min: 1,
                   max: 5,
                   divisions: 4,
-                  label: "Tabuu Puanı : -$tabooPuanKacOlcak"),
+                  label: "Tabu Puanı : -$tabooPuanKacOlcak"),
             ],
           )),
     );
   }
+
+  Text buildText(String text) => Text(text);
 
   Divider buildDivider() {
     return Divider(

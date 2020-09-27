@@ -23,6 +23,7 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
         key: _snackbarKey,
         appBar: AppBar(
           leading: IconButton(
+            splashRadius: 20,
             icon: backButton,
             onPressed: () {
               Navigator.pop(context);
@@ -48,127 +49,122 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 250,
-                      width: 250,
-                      child: Image.asset('asset/images/tabuu.png'),
-                    ),
-                    Divider(
-                      height: 20,
-                      indent: 500.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width - 100,
-                          height: 70,
-                          child: TextField(
-                            focusNode: takim1Focus,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (a) {
-                              _focusGecis(context, takim1Focus, takim2Focus);
-                            },
-                            controller: takim1Name,
-                            decoration: InputDecoration(
-                                icon: teamIcon,
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    borderSide: BorderSide(
-                                      width: 0.5,
-                                    )),
-                                hintText: 'Takım 1 ',
-                                labelText: 'Takım 1'),
-                          ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 250,
+                    width: 250,
+                    child: Image.asset('asset/images/tabuu.png'),
+                  ),
+                  Divider(
+                    height: 20,
+                    indent: 500.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                        height: 70,
+                        child: TextField(
+                          focusNode: takim1Focus,
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (a) {
+                            _focusGecis(context, takim1Focus, takim2Focus);
+                          },
+                          controller: takim1Name,
+                          decoration: InputDecoration(
+                              icon: teamIcon,
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  borderSide: BorderSide(
+                                    width: 0.5,
+                                  )),
+                              hintText: 'Takım 1 ',
+                              labelText: 'Takım 1'),
                         ),
-                        Text('')
-                      ],
-                    ),
-                    Divider(
-                      height: 20,
-                      indent: 500.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(''),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 100,
-                          height: 70,
-                          child: TextField(
-                            focusNode: takim2Focus,
-                            controller: takim2Name,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                                icon: teamIcon,
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    borderSide: BorderSide(width: 0.5)),
-                                hintText: 'Takım 2',
-                                labelText: 'Takım 2'),
-                          ),
+                      ),
+                      Text('')
+                    ],
+                  ),
+                  Divider(
+                    height: 20,
+                    indent: 500.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(''),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                        height: 70,
+                        child: TextField(
+                          focusNode: takim2Focus,
+                          controller: takim2Name,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                              icon: teamIcon,
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  borderSide: BorderSide(width: 0.5)),
+                              hintText: 'Takım 2',
+                              labelText: 'Takım 2'),
                         ),
-                      ],
-                    ),
-                    Divider(
-                      height: 20,
-                      indent: 500.0,
-                    ),
-                    NiceButton(
-                      background: Colors.amber,
-                      radius: 40,
-                      padding: const EdgeInsets.all(15),
-                      text: "Oyunu Başlat",
-                      icon: LineAwesomeIcons.play,
-                      gradientColors: [
-                        Colors.blue,
-                        Colors.amber,
-                      ],
-                      onPressed: () {
-                        if (takim1Name.text.length == 0 ||
-                            takim2Name.text.length == 0) {
-                          _snackbarKey.currentState.showSnackBar(SnackBar(
-                              duration: Duration(milliseconds: 500),
-                              content: Row(
-                                children: [
-                                  Icon(LineAwesomeIcons.exclamation),
-                                  Text(
-                                    'Takım adları boş bırakılamaz.',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )));
-                        } else if (takim1Name.text.length > 12 ||
-                            takim2Name.text.length > 12) {
-                          _snackbarKey.currentState.showSnackBar(SnackBar(
-                              duration: Duration(milliseconds: 500),
-                              content: Row(
-                                children: [
-                                  Icon(LineAwesomeIcons.exclamation),
-                                  Text(
-                                    'Takım adları 12 karakter büyük olamaz.',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )));
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OyunEkrani()),
-                          );
-                        }
-                      },
-                    )
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    height: 20,
+                    indent: 500.0,
+                  ),
+                  NiceButton(
+                    background: Colors.amber,
+                    radius: 40,
+                    padding: const EdgeInsets.all(15),
+                    text: "Oyunu Başlat",
+                    icon: LineAwesomeIcons.play,
+                    gradientColors: [
+                      Colors.blue,
+                      Colors.amber,
+                    ],
+                    onPressed: () {
+                      if (takim1Name.text.length == 0 ||
+                          takim2Name.text.length == 0) {
+                        _snackbarKey.currentState.showSnackBar(SnackBar(
+                            duration: Duration(milliseconds: 500),
+                            content: Row(
+                              children: [
+                                Icon(LineAwesomeIcons.exclamation),
+                                Text(
+                                  'Takım adları boş bırakılamaz.',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )));
+                      } else if (takim1Name.text.length > 12 ||
+                          takim2Name.text.length > 12) {
+                        _snackbarKey.currentState.showSnackBar(SnackBar(
+                            duration: Duration(milliseconds: 500),
+                            content: Row(
+                              children: [
+                                Icon(LineAwesomeIcons.exclamation),
+                                Text(
+                                  'Takım adları 12 karakter büyük olamaz.',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )));
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => OyunEkrani()),
+                        );
+                      }
+                    },
+                  )
+                ],
               ),
             ),
           ],

@@ -1,9 +1,11 @@
 import 'package:Taboo/ayarlar.dart';
 import 'package:Taboo/baslamadan_once.dart';
-import 'package:Taboo/nas%C4%B1l_oynan%C4%B1r.dart';
+import 'package:Taboo/kurallar.dart';
+import 'package:Taboo/sqflite.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Taboo',
+      title: 'Tabuu',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -45,49 +47,45 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                width: 250,
-                height: 250,
+                width: MediaQuery.of(context).size.width - 92.7,
+                height: MediaQuery.of(context).size.height / 2.7 + 2.4,
                 child: Image.asset('asset/images/tabuu.png'),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildContainer(Colors.red, 'Oyuna', 'Başla'),
-                  buildContainer(Colors.green, 'Nasıl', 'Oynanır ?'),
-                ],
+              buildDivider(context),
+              buildGestureDetector(
+                context,
+                'Oyuna Başla',
+                Icon(
+                  LineAwesomeIcons.play,
+                  color: Colors.white,
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildContainer(Colors.amber, 'Ayarlar', ''),
-                  GestureDetector(
-                    onTap: () => SystemNavigator.pop(),
-                    child: Container(
-                        alignment: Alignment.center,
-                        width: (MediaQuery.of(context).size.width / 2) - 30,
-                        height: (MediaQuery.of(context).size.width / 2) - 30,
-                        color: Colors.blue,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Çıkış',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            Text(
-                              'Yap',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                          ],
-                        )),
-                  )
-                ],
+              buildDivider(context),
+              buildGestureDetector(
+                context,
+                'Ayarlar',
+                Icon(
+                  LineAwesomeIcons.stream,
+                  color: Colors.white,
+                ),
+              ),
+              buildDivider(context),
+              buildGestureDetector(
+                context,
+                'Kurallar',
+                Icon(
+                  LineAwesomeIcons.info,
+                  color: Colors.white,
+                ),
+              ),
+              buildDivider(context),
+              buildGestureDetector(
+                context,
+                'Çıkış Yap',
+                Icon(
+                  LineAwesomeIcons.door_closed,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -96,49 +94,62 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 
-  GestureDetector buildContainer(a, String text, String text2) {
+  Divider buildDivider(BuildContext context) {
+    return Divider(
+      height: MediaQuery.of(context).size.height / 40,
+      indent: 500.0,
+    );
+  }
+
+  GestureDetector buildGestureDetector(
+      BuildContext context, String text, dynamic iconn) {
+    final TodoHelper _todoHelper = TodoHelper();
+
     return GestureDetector(
       onTap: () {
-        if (text == 'Oyuna') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => BaslamadanOnce()),
-          );
-        } else if (text == 'Nasıl') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NasilOynanir()),
-          );
-        } else if (text == 'Ayarlar') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Ayarlar()),
-          );
-        }
+        text == 'Oyuna Başla'
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BaslamadanOnce()),
+              )
+            : text == 'Ayarlar'
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Ayarlar()),
+                  )
+                : text == 'Kurallar'
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NasilOynanir()),
+                      )
+                    : SystemNavigator.pop();
+        _todoHelper.delete();
       },
       child: Container(
-          alignment: Alignment.center,
-          width: (MediaQuery.of(context).size.width / 2) - 30,
-          height: (MediaQuery.of(context).size.width / 2) - 30,
-          color: a,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                text,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-              Text(
-                text2,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
+          width: MediaQuery.of(context).size.width / 1.5,
+          height: 60,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3),
+              )
             ],
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: Colors.blue[300],
+          ),
+          alignment: Alignment.center,
+          child: ListTile(
+            leading: iconn,
+            title: Text(
+              text,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
           )),
     );
   }

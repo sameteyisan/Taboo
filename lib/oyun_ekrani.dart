@@ -12,7 +12,6 @@ var _random = Random();
 
 TaskModel gonderilen;
 var anlikpuan = 0;
-bool molaController = false;
 var tabooPuanKacOlcak = 1;
 var dogruPuankacOlcak = 1;
 var pasHakkkiKac = 3;
@@ -21,6 +20,7 @@ var dogruPuan = 0;
 var pasHakki = 0;
 var seconds = 60;
 final assetsAudioPlayer = AssetsAudioPlayer();
+final assetsAudioPlayerClock = AssetsAudioPlayer();
 
 class OyunEkrani extends StatefulWidget {
   OyunEkrani({
@@ -35,7 +35,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
   @override
   void initState() {
     super.initState();
-    assetsAudioPlayer.open(
+    assetsAudioPlayerClock.open(
       Audio("asset/audios/clock.mp3"),
     );
   }
@@ -47,71 +47,114 @@ class _OyunEkraniState extends State<OyunEkrani> {
     final Tabu tt = new Tabu.fromJson(tabu, rnd);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            molaController == false
-                ? Column(
-                    children: [
-                      IconButton(
-                        splashRadius: 20,
-                        icon: Icon(
-                          LineAwesomeIcons.pause,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            molaController = true;
-                            assetsAudioPlayer.pause();
-                          });
-                        },
-                      ),
-                      Text(
-                        'Mola',
-                        style: TextStyle(color: Colors.black, fontSize: 10),
-                      )
-                    ],
-                  )
-                : Column(
-                    children: [
-                      IconButton(
-                        splashRadius: 20,
-                        icon: Icon(
-                          LineAwesomeIcons.play,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            molaController = false;
-                            assetsAudioPlayer.play();
-                          });
-                        },
-                      ),
-                      Text(
-                        'Devam',
-                        style: TextStyle(color: Colors.black, fontSize: 10),
-                      )
-                    ],
-                  ),
-            SizedBox(
-              height: 100,
-              width: 100,
-              child: Image.asset('asset/images/tabuu.png'),
-            ),
-            Countdown(
+        actions: [
+          SizedBox(
+            height: 100,
+            width: 100,
+            child: Image.asset('asset/images/tabuu.png'),
+          ),
+          Spacer(
+            flex: 1,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Countdown(
               seconds: seconds,
-              build: (BuildContext context, double time) => Container(
-                alignment: Alignment.center,
-                width: 200,
-                height: 50,
-                child: Text(
-                  'Kalan Süre : ' + time.toInt().toString(),
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-              ),
+              build: (BuildContext context, double time) => SizedBox(
+                  child: Row(
+                children: [
+                  seconds == 180
+                      ? time > 90
+                          ? Icon(
+                              LineAwesomeIcons.hourglass_start,
+                              color: Colors.black,
+                            )
+                          : time > 15
+                              ? Icon(
+                                  LineAwesomeIcons.hourglass_half,
+                                  color: Colors.black,
+                                )
+                              : Icon(
+                                  LineAwesomeIcons.hourglass_end,
+                                  color:
+                                      time > 3 ? Colors.black : Colors.red[700],
+                                )
+                      : seconds == 150
+                          ? time > 75
+                              ? Icon(
+                                  LineAwesomeIcons.hourglass_start,
+                                  color: Colors.black,
+                                )
+                              : time > 15
+                                  ? Icon(
+                                      LineAwesomeIcons.hourglass_half,
+                                      color: Colors.black,
+                                    )
+                                  : Icon(
+                                      LineAwesomeIcons.hourglass_end,
+                                      color: time > 3
+                                          ? Colors.black
+                                          : Colors.red[700],
+                                    )
+                          : seconds == 120
+                              ? time > 60
+                                  ? Icon(
+                                      LineAwesomeIcons.hourglass_start,
+                                      color: Colors.black,
+                                    )
+                                  : time > 15
+                                      ? Icon(
+                                          LineAwesomeIcons.hourglass_half,
+                                          color: Colors.black,
+                                        )
+                                      : Icon(
+                                          LineAwesomeIcons.hourglass_end,
+                                          color: time > 3
+                                              ? Colors.black
+                                              : Colors.red[700],
+                                        )
+                              : seconds == 90
+                                  ? time > 45
+                                      ? Icon(
+                                          LineAwesomeIcons.hourglass_start,
+                                          color: Colors.black,
+                                        )
+                                      : time > 15
+                                          ? Icon(
+                                              LineAwesomeIcons.hourglass_half,
+                                              color: Colors.black,
+                                            )
+                                          : Icon(
+                                              LineAwesomeIcons.hourglass_end,
+                                              color: time > 3
+                                                  ? Colors.black
+                                                  : Colors.red[700],
+                                            )
+                                  : time > 30
+                                      ? Icon(
+                                          LineAwesomeIcons.hourglass_start,
+                                          color: Colors.black,
+                                        )
+                                      : time > 10
+                                          ? Icon(
+                                              LineAwesomeIcons.hourglass_half,
+                                              color: Colors.black,
+                                            )
+                                          : Icon(
+                                              LineAwesomeIcons.hourglass_end,
+                                              color: time > 3
+                                                  ? Colors.black
+                                                  : Colors.red[700],
+                                            ),
+                  Text(
+                    time.toInt().toString() + ' Saniye',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: time > 3 ? Colors.black : Colors.red[700]),
+                  ),
+                ],
+              )),
               interval: Duration(seconds: 1),
               onFinished: () async {
                 gonderilen = sirakontrol % 2 == 0
@@ -120,7 +163,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
                 await _todoHelper.insertTask(gonderilen);
                 await _todoHelper.calculateTotal();
                 setState(() {
-                  assetsAudioPlayer.stop();
+                  assetsAudioPlayerClock.stop();
                   takim1Skor = takim1Skor;
                   takim2Skor = takim2Skor;
                 });
@@ -130,8 +173,8 @@ class _OyunEkraniState extends State<OyunEkrani> {
                     (route) => false);
               },
             ),
-          ],
-        ),
+          ),
+        ],
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -140,78 +183,93 @@ class _OyunEkraniState extends State<OyunEkrani> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-            color: Colors.deepOrangeAccent,
-            onPressed: () {
-              if (pasHakkkiKac == 0) {
-              } else {
+          Container(
+            width: MediaQuery.of(context).size.width / 3.6,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18)),
+              color: Colors.deepOrangeAccent,
+              onPressed: () {
+                if (pasHakkkiKac == 0) {
+                } else {
+                  assetsAudioPlayer.open(
+                    Audio("asset/audios/pas.mp3"),
+                  );
+                  setState(() {
+                    anlikpuan += 0;
+                    pasHakkkiKac -= 1;
+                    pasHakki += 1;
+                  });
+                }
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    LineAwesomeIcons.redo,
+                    color: Colors.white,
+                  ),
+                  Text('Pas (${pasHakkkiKac.toString()})',
+                      style: TextStyle(color: Colors.white))
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width / 3.6,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18)),
+              color: Colors.red,
+              onPressed: () {
                 assetsAudioPlayer.open(
-                  Audio("asset/audios/pas.mp3"),
+                  Audio("asset/audios/false.mp3"),
                 );
                 setState(() {
-                  anlikpuan += 0;
-                  pasHakkkiKac -= 1;
-                  pasHakki += 1;
+                  anlikpuan -= tabooPuanKacOlcak;
+                  tabooPuan += 1;
                 });
-              }
-            },
-            child: Row(
-              children: [
-                Icon(
-                  LineAwesomeIcons.redo,
-                  color: Colors.white,
-                ),
-                Text('Pas (${pasHakkkiKac.toString()})',
-                    style: TextStyle(color: Colors.white))
-              ],
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    LineAwesomeIcons.frowning_face,
+                    color: Colors.white,
+                  ),
+                  Text('Tabu', style: TextStyle(color: Colors.white))
+                ],
+              ),
             ),
           ),
-          FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-            color: Colors.red,
-            onPressed: () {
-              assetsAudioPlayer.open(
-                Audio("asset/audios/false.mp3"),
-              );
-              setState(() {
-                anlikpuan -= tabooPuanKacOlcak;
-                tabooPuan += 1;
-              });
-            },
-            child: Row(
-              children: [
-                Icon(
-                  LineAwesomeIcons.frowning_face,
-                  color: Colors.white,
-                ),
-                Text('Taboo', style: TextStyle(color: Colors.white))
-              ],
-            ),
-          ),
-          FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-            color: Colors.green,
-            onPressed: () {
-              assetsAudioPlayer.open(
-                Audio("asset/audios/true.mp3"),
-              );
-              setState(() {
-                anlikpuan += dogruPuankacOlcak;
-                dogruPuan += 1;
-              });
-            },
-            child: Row(
-              children: [
-                Icon(
-                  LineAwesomeIcons.grinning_face,
-                  color: Colors.white,
-                ),
-                Text('Doğru', style: TextStyle(color: Colors.white))
-              ],
+          Container(
+            width: MediaQuery.of(context).size.width / 3.6,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18)),
+              color: Colors.green,
+              onPressed: () {
+                assetsAudioPlayer.open(
+                  Audio("asset/audios/true.mp3"),
+                );
+                setState(() {
+                  anlikpuan += dogruPuankacOlcak;
+                  dogruPuan += 1;
+                });
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    LineAwesomeIcons.grinning_face,
+                    color: Colors.white,
+                  ),
+                  Text('Doğru', style: TextStyle(color: Colors.white))
+                ],
+              ),
             ),
           ),
         ],
@@ -225,20 +283,14 @@ class _OyunEkraniState extends State<OyunEkrani> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Divider(
-                    height: 10,
-                    indent: 500.0,
-                  ),
+                  buildDivider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       sirakontrol % 2 == 0
                           ? buildTakimNameTasarim(takim1Name.text)
                           : buildTakimNameTasarim(takim2Name.text),
-                      Container(
-                        alignment: Alignment.center,
-                        width: 100,
-                        height: 50,
+                      SizedBox(
                         child: Text(
                           'Skor : $anlikpuan',
                           style: TextStyle(
@@ -249,17 +301,19 @@ class _OyunEkraniState extends State<OyunEkrani> {
                       ),
                     ],
                   ),
-                  Divider(
-                    height: 20,
-                    indent: 500.0,
-                  ),
+                  buildDivider(),
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          topRight: Radius.circular(10.0),
-                        ),
-                        border: Border.all(width: 0.5, color: Colors.black)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        )
+                      ],
+                      color: Colors.blue[300],
+                    ),
                     width: MediaQuery.of(context).size.width - 50,
                     height: MediaQuery.of(context).size.height - 312,
                     child: Column(
@@ -275,11 +329,15 @@ class _OyunEkraniState extends State<OyunEkrani> {
     );
   }
 
-  Container buildTakimNameTasarim(String takim) {
-    return Container(
-      alignment: Alignment.center,
-      width: 200,
-      height: 50,
+  Divider buildDivider() {
+    return Divider(
+      height: 20,
+      indent: 500.0,
+    );
+  }
+
+  SizedBox buildTakimNameTasarim(String takim) {
+    return SizedBox(
       child: Text(
         takim,
         style: TextStyle(
@@ -295,17 +353,17 @@ class _OyunEkraniState extends State<OyunEkrani> {
         child: Text(
           tt.kelime,
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 25),
         ),
         width: MediaQuery.of(context).size.width - 50,
         height: 70,
         decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.blue[300],
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.0),
               topRight: Radius.circular(10.0),
             ),
-            border: Border.all(width: 0.5, color: Colors.black)),
+            border: Border.all(width: 0.5, color: Colors.blue[300])),
       ),
     ];
 
@@ -320,10 +378,10 @@ class _OyunEkraniState extends State<OyunEkrani> {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width - 50,
       height: MediaQuery.of(context).size.height / 6 - 50,
-      color: Colors.white,
+      color: Colors.blue[300],
       child: Text(
         word,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        style: TextStyle(fontSize: 18, color: Colors.white),
       ),
     );
   }

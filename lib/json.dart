@@ -17,15 +17,15 @@ class Tabu {
 
 var tabu = [
   {
-    "kelime": "kadın budu",
+    "kelime": "Kadın Budu",
     "yasakli": ["kelime1", "kelime2", "kelime3", "kelime4", "kelime5"],
   },
   {
-    "kelime": "kadın",
+    "kelime": "Kadın",
     "yasakli": ["kelime1", "kelime2", "kelime3", "kelime4", "kelime5"],
   },
   {
-    "kelime": "but",
+    "kelime": "But",
     "yasakli": ["kelime1", "kelime2", "kelime3", "kelime4", "kelime5"],
   }
 ];

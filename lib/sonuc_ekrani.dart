@@ -96,12 +96,8 @@ class _SonucEkraniState extends State<SonucEkrani> {
                     Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                          ),
-                          border: Border.all(width: 0.5, color: Colors.black)),
+                          color: Colors.blue[300],
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       width: MediaQuery.of(context).size.width - 50,
                       height: MediaQuery.of(context).size.height - 343,
                       child: Column(
@@ -109,23 +105,36 @@ class _SonucEkraniState extends State<SonucEkrani> {
                           Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                                border: Border.all(
-                                    width: 0.5, color: Colors.black)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3),
+                                  )
+                                ],
+                                color: Colors.blue[300],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                             width: MediaQuery.of(context).size.width - 50,
                             height: 70,
-                            child: Text(
-                              'Takım 1',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: sirakontrol % 2 == 0
+                                ? Text(
+                                    takim1Name.text,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : Text(
+                                    takim2Name.text,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                           buildContainer('Doğru Sayısı : $dogruPuan'),
                           buildContainer('Kullanılan Pas Sayısı : $pasHakki'),
@@ -168,7 +177,7 @@ class _SonucEkraniState extends State<SonucEkrani> {
 
   Container buildContainer(String bilgi) {
     return Container(
-      color: Colors.blueAccent,
+      color: Colors.blue[300],
       width: MediaQuery.of(context).size.width - 50,
       height: MediaQuery.of(context).size.height / 7 - 50,
       alignment: Alignment.center,

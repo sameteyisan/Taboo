@@ -54,6 +54,14 @@ class TodoHelper {
     }
   }
 
+  Future<void> delete() async {
+    try {
+      db.delete(tableName);
+    } catch (_) {
+      print(_);
+    }
+  }
+
   Future calculateTotal() async {
     var result = sirakontrol % 2 == 0
         ? await db
