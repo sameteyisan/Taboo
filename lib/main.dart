@@ -1,6 +1,7 @@
 import 'package:Taboo/ayarlar.dart';
 import 'package:Taboo/baslamadan_once.dart';
 import 'package:Taboo/nas%C4%B1l_oynan%C4%B1r.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -35,16 +36,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('asset/images/background.jpg'),
-                fit: BoxFit.cover)),
-        child: Center(
+        body: ListView(
+      children: [
+        Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              SizedBox(
+                width: 250,
+                height: 250,
+                child: Image.asset('asset/images/tabuu.png'),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -88,8 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-      ),
-    );
+      ],
+    ));
   }
 
   GestureDetector buildContainer(a, String text, String text2) {

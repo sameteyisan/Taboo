@@ -2,6 +2,9 @@ import 'package:Taboo/oyun_ekrani.dart';
 import 'package:Taboo/sonuc_ekrani.dart';
 import 'package:Taboo/toplu_degisimler.dart';
 import 'package:flutter/material.dart';
+import 'package:nice_button/NiceButton.dart';
+
+GlobalKey<ScaffoldState> _snackbarKey = new GlobalKey<ScaffoldState>();
 
 class Ayarlar extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class _AyarlarState extends State<Ayarlar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _snackbarKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
@@ -32,6 +36,35 @@ class _AyarlarState extends State<Ayarlar> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: NiceButton(
+        background: Colors.amber,
+        radius: 40,
+        padding: const EdgeInsets.all(15),
+        text: "Başlangıç Ayarlarına Dön",
+        fontSize: 15,
+        icon: teamIcon.icon,
+        gradientColors: [
+          Colors.blue,
+          Colors.amber,
+        ],
+        onPressed: () {
+          _snackbarKey.currentState.showSnackBar(SnackBar(
+            duration: Duration(milliseconds: 500),
+            backgroundColor: Colors.amber,
+            content: Text(
+              'İşlem başarılı.',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+          ));
+          setState(() {
+            seconds = 60;
+            bitisPuani = 25;
+            dogruPuankacOlcak = 1;
+            tabooPuanKacOlcak = 1;
+          });
+        },
+      ),
       body: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -47,9 +80,9 @@ class _AyarlarState extends State<Ayarlar> {
                   min: 25,
                   max: 100,
                   divisions: 3,
-                  label: "Bitiş Puanı : $bitisPuani"),
+                  label: "Bitiş Puanı : $bitisPuani puan"),
               buildDivider(),
-              Text('Zaman'),
+              Text('Oyun Süresi'),
               Slider(
                   activeColor: Colors.amber,
                   value: seconds.toDouble(),
@@ -59,7 +92,7 @@ class _AyarlarState extends State<Ayarlar> {
                   min: 60,
                   max: 180,
                   divisions: 4,
-                  label: "Zaman : $seconds"),
+                  label: "Süre : $seconds saniye"),
               buildDivider(),
               Text('Doğru Cevap Puanı'),
               Slider(
@@ -72,9 +105,9 @@ class _AyarlarState extends State<Ayarlar> {
                   min: 1,
                   max: 5,
                   divisions: 4,
-                  label: "Doğru Cevap Puanı : $dogruPuankacOlcak"),
+                  label: "Doğru Cevap Puanı : +$dogruPuankacOlcak"),
               buildDivider(),
-              Text('Taboo Puanı'),
+              Text('Tabuu Puanı'),
               Slider(
                   activeColor: Colors.red,
                   value: tabooPuanKacOlcak.toDouble(),
@@ -85,7 +118,7 @@ class _AyarlarState extends State<Ayarlar> {
                   min: 1,
                   max: 5,
                   divisions: 4,
-                  label: "Taboo Puanı : -$tabooPuanKacOlcak"),
+                  label: "Tabuu Puanı : -$tabooPuanKacOlcak"),
             ],
           )),
     );
@@ -93,7 +126,7 @@ class _AyarlarState extends State<Ayarlar> {
 
   Divider buildDivider() {
     return Divider(
-      height: 10,
+      height: 20,
       indent: 500.0,
     );
   }
