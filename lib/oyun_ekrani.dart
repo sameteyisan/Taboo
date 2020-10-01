@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:Taboo/game_over.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:Taboo/baslamadan_once.dart';
 import 'package:Taboo/json.dart';
@@ -9,7 +10,6 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 var _random = Random();
-
 TaskModel gonderilen;
 var anlikpuan = 0;
 var tabooPuanKacOlcak = 1;
@@ -42,6 +42,14 @@ class _OyunEkraniState extends State<OyunEkrani> {
 
   @override
   Widget build(BuildContext context) {
+    if (tabu.length == 0) {
+      setState(() {
+        assetsAudioPlayerClock.stop();
+        takim1Skor = takim1Skor;
+        takim2Skor = takim2Skor;
+      });
+      return GameOver();
+    }
     final TodoHelper _todoHelper = TodoHelper();
     var rnd = _random.nextInt(tabu.length);
     final Tabu tt = new Tabu.fromJson(tabu, rnd);
@@ -63,40 +71,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
               build: (BuildContext context, double time) => SizedBox(
                   child: Row(
                 children: [
-                  seconds == 180
-                      ? time > 90
-                          ? Icon(
-                              LineAwesomeIcons.hourglass_start,
-                              color: Colors.black,
-                            )
-                          : time > 15
-                              ? Icon(
-                                  LineAwesomeIcons.hourglass_half,
-                                  color: Colors.black,
-                                )
-                              : Icon(
-                                  LineAwesomeIcons.hourglass_end,
-                                  color:
-                                      time > 3 ? Colors.black : Colors.red[700],
-                                )
-                      : seconds == 150
-                          ? time > 75
-                              ? Icon(
-                                  LineAwesomeIcons.hourglass_start,
-                                  color: Colors.black,
-                                )
-                              : time > 15
-                                  ? Icon(
-                                      LineAwesomeIcons.hourglass_half,
-                                      color: Colors.black,
-                                    )
-                                  : Icon(
-                                      LineAwesomeIcons.hourglass_end,
-                                      color: time > 3
-                                          ? Colors.black
-                                          : Colors.red[700],
-                                    )
-                          : seconds == 120
+                  seconds == 120
                               ? time > 60
                                   ? Icon(
                                       LineAwesomeIcons.hourglass_start,
@@ -155,7 +130,6 @@ class _OyunEkraniState extends State<OyunEkrani> {
                   ),
                 ],
               )),
-              interval: Duration(seconds: 1),
               onFinished: () async {
                 gonderilen = sirakontrol % 2 == 0
                     ? TaskModel(takim1: anlikpuan, takim2: 0)
@@ -163,6 +137,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
                 await _todoHelper.insertTask(gonderilen);
                 await _todoHelper.calculateTotal();
                 setState(() {
+                  tabu.removeAt(rnd);
                   assetsAudioPlayerClock.stop();
                   takim1Skor = takim1Skor;
                   takim2Skor = takim2Skor;
@@ -199,6 +174,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
                     anlikpuan += 0;
                     pasHakkkiKac -= 1;
                     pasHakki += 1;
+                    tabu.removeAt(rnd);
                   });
                 }
               },
@@ -229,6 +205,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
                 setState(() {
                   anlikpuan -= tabooPuanKacOlcak;
                   tabooPuan += 1;
+                  tabu.removeAt(rnd);
                 });
               },
               child: Row(
@@ -257,6 +234,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
                 setState(() {
                   anlikpuan += dogruPuankacOlcak;
                   dogruPuan += 1;
+                  tabu.removeAt(rnd);
                 });
               },
               child: Row(
@@ -277,6 +255,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
       body: Container(
         color: Colors.white,
         child: ListView(
+          shrinkWrap: true,
           children: [
             Padding(
               padding: const EdgeInsets.all(0),

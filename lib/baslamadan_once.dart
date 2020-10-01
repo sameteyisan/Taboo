@@ -67,6 +67,11 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
                         width: MediaQuery.of(context).size.width - 100,
                         height: 70,
                         child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              takim1Name = takim1Name;
+                            });
+                          },
                           focusNode: takim1Focus,
                           textInputAction: TextInputAction.next,
                           onSubmitted: (a) {
@@ -85,7 +90,11 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
                               labelText: 'Takım 1'),
                         ),
                       ),
-                      Text('')
+                      Text('  '),
+                      buildAnimatedCrossFade(takim1Name.text),
+                      Spacer(
+                        flex: 1,
+                      )
                     ],
                   ),
                   Divider(
@@ -95,11 +104,18 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(''),
+                      Spacer(
+                        flex: 1,
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width - 100,
                         height: 70,
                         child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              takim2Name = takim2Name;
+                            });
+                          },
                           focusNode: takim2Focus,
                           controller: takim2Name,
                           textInputAction: TextInputAction.done,
@@ -113,62 +129,99 @@ class _BaslamadanOnceState extends State<BaslamadanOnce> {
                               labelText: 'Takım 2'),
                         ),
                       ),
+                      Text('  '),
+                      buildAnimatedCrossFade(takim2Name.text),
                     ],
                   ),
                   Divider(
                     height: 20,
                     indent: 500.0,
                   ),
-                  NiceButton(
-                    background: Colors.amber,
-                    radius: 40,
-                    padding: const EdgeInsets.all(15),
-                    text: "Oyunu Başlat",
-                    icon: LineAwesomeIcons.play,
-                    gradientColors: [
-                      Colors.blue,
-                      Colors.amber,
-                    ],
-                    onPressed: () {
-                      if (takim1Name.text.length == 0 ||
-                          takim2Name.text.length == 0) {
-                        _snackbarKey.currentState.showSnackBar(SnackBar(
-                            duration: Duration(milliseconds: 500),
-                            content: Row(
-                              children: [
-                                Icon(LineAwesomeIcons.exclamation),
-                                Text(
-                                  'Takım adları boş bırakılamaz.',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )));
-                      } else if (takim1Name.text.length > 12 ||
-                          takim2Name.text.length > 12) {
-                        _snackbarKey.currentState.showSnackBar(SnackBar(
-                            duration: Duration(milliseconds: 500),
-                            content: Row(
-                              children: [
-                                Icon(LineAwesomeIcons.exclamation),
-                                Text(
-                                  'Takım adları 12 karakter büyük olamaz.',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )));
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => OyunEkrani()),
-                        );
-                      }
-                    },
-                  )
+                  AnimatedCrossFade(
+                      firstChild: NiceButton(
+                        background: Colors.amber,
+                        radius: 40,
+                        padding: const EdgeInsets.all(15),
+                        text: "Oyunu Başlat",
+                        icon: LineAwesomeIcons.play,
+                        gradientColors: [
+                          Colors.blue,
+                          Colors.amber,
+                        ],
+                        onPressed: () {
+                          if (takim1Name.text.length == 0 ||
+                              takim2Name.text.length == 0) {
+                            _snackbarKey.currentState.showSnackBar(SnackBar(
+                                duration: Duration(milliseconds: 500),
+                                content: Row(
+                                  children: [
+                                    Icon(LineAwesomeIcons.exclamation),
+                                    Text(
+                                      'Takım adları boş bırakılamaz.',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )));
+                          } else if (takim1Name.text.length > 12 ||
+                              takim2Name.text.length > 12) {
+                            _snackbarKey.currentState.showSnackBar(SnackBar(
+                                duration: Duration(milliseconds: 500),
+                                content: Row(
+                                  children: [
+                                    Icon(LineAwesomeIcons.exclamation),
+                                    Text(
+                                      'Takım adları 12 karakter büyük olamaz.',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )));
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OyunEkrani()),
+                            );
+                          }
+                        },
+                      ),
+                      secondChild: NiceButton(
+                        background: Colors.amber,
+                        radius: 40,
+                        padding: const EdgeInsets.all(15),
+                        text: "Bilgileri Doldur",
+                        icon: LineAwesomeIcons.exclamation,
+                        gradientColors: [
+                          Colors.red,
+                          Colors.orange,
+                        ],
+                        onPressed: () {},
+                      ),
+                      duration: const Duration(milliseconds: 500),
+                      crossFadeState: takim1Name.text.length == 0 ||
+                              takim2Name.text.length == 0 ||
+                              takim1Name.text.length > 12 ||
+                              takim2Name.text.length > 12
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst),
                 ],
               ),
             ),
           ],
         ));
+  }
+
+  AnimatedCrossFade buildAnimatedCrossFade(String info) {
+    return AnimatedCrossFade(
+        duration: Duration(milliseconds: 500),
+        firstChild: Icon(LineAwesomeIcons.check),
+        secondChild: Icon(
+          LineAwesomeIcons.exclamation,
+        ),
+        crossFadeState: info.length == 0 || info.length > 12
+            ? CrossFadeState.showSecond
+            : CrossFadeState.showFirst);
   }
 
   _focusGecis(BuildContext context, FocusNode simdiki, FocusNode siradaki) {

@@ -1,6 +1,7 @@
 import 'package:Taboo/baslamadan_once.dart';
 import 'package:Taboo/main.dart';
 import 'package:Taboo/oyun_ekrani.dart';
+import 'package:Taboo/sqflite.dart';
 import 'package:Taboo/toplu_degisimler.dart';
 import 'package:flutter/material.dart';
 import 'package:nice_button/NiceButton.dart';
@@ -8,7 +9,7 @@ import 'package:nice_button/NiceButton.dart';
 var takim1Skor = 0;
 var takim2Skor = 0;
 var sirakontrol = 0;
-var bitisPuani = 25;
+var bitisPuani = 20;
 
 class SonucEkrani extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class SonucEkrani extends StatefulWidget {
 }
 
 class _SonucEkraniState extends State<SonucEkrani> {
+  final TodoHelper _todoHelper = TodoHelper();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,11 +77,12 @@ class _SonucEkraniState extends State<SonucEkrani> {
                   Colors.amber,
                   Colors.blue,
                 ],
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
                     takim1Name.text = '';
                     takim2Name.text = '';
                   });
+                  await _todoHelper.delete();
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => MyApp()),
@@ -138,7 +141,7 @@ class _SonucEkraniState extends State<SonucEkrani> {
                           ),
                           buildContainer('Doğru Sayısı : $dogruPuan'),
                           buildContainer('Kullanılan Pas Sayısı : $pasHakki'),
-                          buildContainer('Taboo Sayısı : $tabooPuan'),
+                          buildContainer('Tabuu Sayısı : $tabooPuan'),
                           buildContainer('Kazanılan Puan : $anlikpuan'),
                           buildContainer('Toplam Skor '),
                           sirakontrol % 2 == 0

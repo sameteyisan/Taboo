@@ -61,7 +61,7 @@ class _AyarlarState extends State<Ayarlar> {
           ));
           setState(() {
             seconds = 60;
-            bitisPuani = 25;
+            bitisPuani = 20;
             dogruPuankacOlcak = 1;
             tabooPuanKacOlcak = 1;
           });
@@ -79,8 +79,8 @@ class _AyarlarState extends State<Ayarlar> {
                   onChanged: (yeniBitisPuani) {
                     setState(() => bitisPuani = yeniBitisPuani.toInt());
                   },
-                  min: 25,
-                  max: 100,
+                  min: 20,
+                  max: 50,
                   divisions: 3,
                   label: "Bitiş Puanı : $bitisPuani puan"),
               buildDivider(),
@@ -92,8 +92,8 @@ class _AyarlarState extends State<Ayarlar> {
                     setState(() => seconds = yeniOyunSuresi.toInt());
                   },
                   min: 60,
-                  max: 180,
-                  divisions: 4,
+                  max: 120,
+                  divisions: 2,
                   label: "Süre : $seconds saniye"),
               buildDivider(),
               buildText('Doğru Cevap Puanı'),
@@ -105,8 +105,8 @@ class _AyarlarState extends State<Ayarlar> {
                         dogruPuankacOlcak = yeniDogruCevapKacOlcak.toInt());
                   },
                   min: 1,
-                  max: 5,
-                  divisions: 4,
+                  max: 3,
+                  divisions: 2,
                   label: "Doğru Cevap Puanı : +$dogruPuankacOlcak"),
               buildDivider(),
               buildText('Tabu Puanı'),
@@ -118,8 +118,8 @@ class _AyarlarState extends State<Ayarlar> {
                         tabooPuanKacOlcak = yeniTabooPuanKacOlcak.toInt());
                   },
                   min: 1,
-                  max: 5,
-                  divisions: 4,
+                  max: 3,
+                  divisions: 2,
                   label: "Tabu Puanı : -$tabooPuanKacOlcak"),
             ],
           )),

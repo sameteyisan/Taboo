@@ -39,59 +39,62 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return Scaffold(
-        body: ListView(
-      children: [
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 92.7,
-                height: MediaQuery.of(context).size.height / 2.7 + 2.4,
-                child: Image.asset('asset/images/tabuu.png'),
-              ),
-              buildDivider(context),
-              buildGestureDetector(
-                context,
-                'Oyuna Başla',
-                Icon(
-                  LineAwesomeIcons.play,
-                  color: Colors.white,
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+          body: ListView(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 92.7,
+                  height: MediaQuery.of(context).size.height / 2.7 + 2.4,
+                  child: Image.asset('asset/images/tabuu.png'),
                 ),
-              ),
-              buildDivider(context),
-              buildGestureDetector(
-                context,
-                'Ayarlar',
-                Icon(
-                  LineAwesomeIcons.stream,
-                  color: Colors.white,
+                buildDivider(context),
+                buildGestureDetector(
+                  context,
+                  'Oyuna Başla',
+                  Icon(
+                    LineAwesomeIcons.play,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              buildDivider(context),
-              buildGestureDetector(
-                context,
-                'Kurallar',
-                Icon(
-                  LineAwesomeIcons.info,
-                  color: Colors.white,
+                buildDivider(context),
+                buildGestureDetector(
+                  context,
+                  'Ayarlar',
+                  Icon(
+                    LineAwesomeIcons.stream,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              buildDivider(context),
-              buildGestureDetector(
-                context,
-                'Çıkış Yap',
-                Icon(
-                  LineAwesomeIcons.door_closed,
-                  color: Colors.white,
+                buildDivider(context),
+                buildGestureDetector(
+                  context,
+                  'Kurallar',
+                  Icon(
+                    LineAwesomeIcons.info,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
+                buildDivider(context),
+                buildGestureDetector(
+                  context,
+                  'Çıkış Yap',
+                  Icon(
+                    LineAwesomeIcons.door_closed,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ));
+        ],
+      )),
+    );
   }
 
   Divider buildDivider(BuildContext context) {
@@ -152,5 +155,26 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )),
     );
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Emin Misiniz'),
+            content: Text('Uygulama kapatılsın mı ?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('Hayır'),
+              ),
+              FlatButton(
+                onPressed: () => SystemNavigator.pop(),
+                child: Text('Evet'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 }
