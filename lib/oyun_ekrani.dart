@@ -72,55 +72,54 @@ class _OyunEkraniState extends State<OyunEkrani> {
                   child: Row(
                 children: [
                   seconds == 120
-                              ? time > 60
+                      ? time > 60
+                          ? Icon(
+                              LineAwesomeIcons.hourglass_start,
+                              color: Colors.black,
+                            )
+                          : time > 15
+                              ? Icon(
+                                  LineAwesomeIcons.hourglass_half,
+                                  color: Colors.black,
+                                )
+                              : Icon(
+                                  LineAwesomeIcons.hourglass_end,
+                                  color:
+                                      time > 3 ? Colors.black : Colors.red[700],
+                                )
+                      : seconds == 90
+                          ? time > 45
+                              ? Icon(
+                                  LineAwesomeIcons.hourglass_start,
+                                  color: Colors.black,
+                                )
+                              : time > 15
                                   ? Icon(
-                                      LineAwesomeIcons.hourglass_start,
+                                      LineAwesomeIcons.hourglass_half,
                                       color: Colors.black,
                                     )
-                                  : time > 15
-                                      ? Icon(
-                                          LineAwesomeIcons.hourglass_half,
-                                          color: Colors.black,
-                                        )
-                                      : Icon(
-                                          LineAwesomeIcons.hourglass_end,
-                                          color: time > 3
-                                              ? Colors.black
-                                              : Colors.red[700],
-                                        )
-                              : seconds == 90
-                                  ? time > 45
-                                      ? Icon(
-                                          LineAwesomeIcons.hourglass_start,
-                                          color: Colors.black,
-                                        )
-                                      : time > 15
-                                          ? Icon(
-                                              LineAwesomeIcons.hourglass_half,
-                                              color: Colors.black,
-                                            )
-                                          : Icon(
-                                              LineAwesomeIcons.hourglass_end,
-                                              color: time > 3
-                                                  ? Colors.black
-                                                  : Colors.red[700],
-                                            )
-                                  : time > 30
-                                      ? Icon(
-                                          LineAwesomeIcons.hourglass_start,
-                                          color: Colors.black,
-                                        )
-                                      : time > 10
-                                          ? Icon(
-                                              LineAwesomeIcons.hourglass_half,
-                                              color: Colors.black,
-                                            )
-                                          : Icon(
-                                              LineAwesomeIcons.hourglass_end,
-                                              color: time > 3
-                                                  ? Colors.black
-                                                  : Colors.red[700],
-                                            ),
+                                  : Icon(
+                                      LineAwesomeIcons.hourglass_end,
+                                      color: time > 3
+                                          ? Colors.black
+                                          : Colors.red[700],
+                                    )
+                          : time > 30
+                              ? Icon(
+                                  LineAwesomeIcons.hourglass_start,
+                                  color: Colors.black,
+                                )
+                              : time > 10
+                                  ? Icon(
+                                      LineAwesomeIcons.hourglass_half,
+                                      color: Colors.black,
+                                    )
+                                  : Icon(
+                                      LineAwesomeIcons.hourglass_end,
+                                      color: time > 3
+                                          ? Colors.black
+                                          : Colors.red[700],
+                                    ),
                   Text(
                     time.toInt().toString() + ' Saniye',
                     style: TextStyle(
@@ -283,15 +282,16 @@ class _OyunEkraniState extends State<OyunEkrani> {
                   buildDivider(),
                   Container(
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.green,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: Offset(0, -3),
                         )
                       ],
-                      color: Colors.blue[300],
                     ),
                     width: MediaQuery.of(context).size.width - 50,
                     height: MediaQuery.of(context).size.height - 312,
@@ -337,7 +337,7 @@ class _OyunEkraniState extends State<OyunEkrani> {
         width: MediaQuery.of(context).size.width - 50,
         height: 70,
         decoration: BoxDecoration(
-            color: Colors.blue[300],
+            color: Colors.red,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.0),
               topRight: Radius.circular(10.0),
@@ -357,7 +357,6 @@ class _OyunEkraniState extends State<OyunEkrani> {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width - 50,
       height: MediaQuery.of(context).size.height / 6 - 50,
-      color: Colors.blue[300],
       child: Text(
         word,
         style: TextStyle(fontSize: 18, color: Colors.white),
