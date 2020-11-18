@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:Taboo/game_over.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -7,8 +8,10 @@ import 'package:Taboo/sonuc_ekrani.dart';
 import 'package:Taboo/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
+int basladimi = 1;
 var _random = Random();
 TaskModel gonderilen;
 var anlikpuan = 0;
@@ -32,12 +35,40 @@ class OyunEkrani extends StatefulWidget {
 }
 
 class _OyunEkraniState extends State<OyunEkrani> {
+  CountdownController countdownController = CountdownController();
   @override
   void initState() {
     super.initState();
-    assetsAudioPlayerClock.open(
-      Audio("asset/audios/clock.mp3"),
-    );
+    Timer.run(() => check());
+    /*  assetsAudioPlayerClock.open(
+    Audio("asset/audios/clock.mp3"),
+    );*/
+  }
+
+  void check() {
+    showDialog(
+        useSafeArea: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Hazır olduğunuzda başlatınız.'),
+            backgroundColor: Colors.amber,
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    basladimi = 0;
+                  });
+                  Navigator.pop(context);
+                  assetsAudioPlayerClock.open(
+                    Audio("asset/audios/clock.mp3"),
+                  );
+                },
+                child: Text('Başlat'),
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -65,89 +96,97 @@ class _OyunEkraniState extends State<OyunEkrani> {
             flex: 1,
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Countdown(
-              seconds: seconds,
-              build: (BuildContext context, double time) => SizedBox(
-                  child: Row(
-                children: [
-                  seconds == 120
-                      ? time > 60
-                          ? Icon(
-                              LineAwesomeIcons.hourglass_start,
-                              color: Colors.black,
-                            )
-                          : time > 15
-                              ? Icon(
-                                  LineAwesomeIcons.hourglass_half,
-                                  color: Colors.black,
-                                )
-                              : Icon(
-                                  LineAwesomeIcons.hourglass_end,
-                                  color:
-                                      time > 3 ? Colors.black : Colors.red[700],
-                                )
-                      : seconds == 90
-                          ? time > 45
-                              ? Icon(
-                                  LineAwesomeIcons.hourglass_start,
-                                  color: Colors.black,
-                                )
-                              : time > 15
+              padding: const EdgeInsets.all(8.0),
+              child: basladimi == 0
+                  ? Countdown(
+                      controller: countdownController,
+                      seconds: seconds,
+                      build: (BuildContext context, double time) => SizedBox(
+                          child: Row(
+                        children: [
+                          seconds == 120
+                              ? time > 60
                                   ? Icon(
-                                      LineAwesomeIcons.hourglass_half,
+                                      LineAwesomeIcons.hourglass_start,
                                       color: Colors.black,
                                     )
-                                  : Icon(
-                                      LineAwesomeIcons.hourglass_end,
-                                      color: time > 3
-                                          ? Colors.black
-                                          : Colors.red[700],
-                                    )
-                          : time > 30
-                              ? Icon(
-                                  LineAwesomeIcons.hourglass_start,
-                                  color: Colors.black,
-                                )
-                              : time > 10
-                                  ? Icon(
-                                      LineAwesomeIcons.hourglass_half,
-                                      color: Colors.black,
-                                    )
-                                  : Icon(
-                                      LineAwesomeIcons.hourglass_end,
-                                      color: time > 3
-                                          ? Colors.black
-                                          : Colors.red[700],
-                                    ),
-                  Text(
-                    time.toInt().toString() + ' Saniye',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: time > 3 ? Colors.black : Colors.red[700]),
-                  ),
-                ],
-              )),
-              onFinished: () async {
-                gonderilen = sirakontrol % 2 == 0
-                    ? TaskModel(takim1: anlikpuan, takim2: 0)
-                    : TaskModel(takim1: 0, takim2: anlikpuan);
-                await _todoHelper.insertTask(gonderilen);
-                await _todoHelper.calculateTotal();
-                setState(() {
-                  tabu.removeAt(rnd);
-                  assetsAudioPlayerClock.stop();
-                  takim1Skor = takim1Skor;
-                  takim2Skor = takim2Skor;
-                });
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => SonucEkrani()),
-                    (route) => false);
-              },
-            ),
-          ),
+                                  : time > 15
+                                      ? Icon(
+                                          LineAwesomeIcons.hourglass_half,
+                                          color: Colors.black,
+                                        )
+                                      : Icon(
+                                          LineAwesomeIcons.hourglass_end,
+                                          color: time > 3
+                                              ? Colors.black
+                                              : Colors.red[700],
+                                        )
+                              : seconds == 90
+                                  ? time > 45
+                                      ? Icon(
+                                          LineAwesomeIcons.hourglass_start,
+                                          color: Colors.black,
+                                        )
+                                      : time > 15
+                                          ? Icon(
+                                              LineAwesomeIcons.hourglass_half,
+                                              color: Colors.black,
+                                            )
+                                          : Icon(
+                                              LineAwesomeIcons.hourglass_end,
+                                              color: time > 3
+                                                  ? Colors.black
+                                                  : Colors.red[700],
+                                            )
+                                  : time > 30
+                                      ? Icon(
+                                          LineAwesomeIcons.hourglass_start,
+                                          color: Colors.black,
+                                        )
+                                      : time > 10
+                                          ? Icon(
+                                              LineAwesomeIcons.hourglass_half,
+                                              color: Colors.black,
+                                            )
+                                          : Icon(
+                                              LineAwesomeIcons.hourglass_end,
+                                              color: time > 3
+                                                  ? Colors.black
+                                                  : Colors.red[700],
+                                            ),
+                          Text(
+                            time.toInt().toString() + ' Saniye',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    time > 3 ? Colors.black : Colors.red[700]),
+                          ),
+                        ],
+                      )),
+                      onFinished: () async {
+                        gonderilen = sirakontrol % 2 == 0
+                            ? TaskModel(takim1: anlikpuan, takim2: 0)
+                            : TaskModel(takim1: 0, takim2: anlikpuan);
+                        await _todoHelper.insertTask(gonderilen);
+                        await _todoHelper.calculateTotal();
+                        setState(() {
+                          tabu.removeAt(rnd);
+                          assetsAudioPlayerClock.stop();
+                          takim1Skor = takim1Skor;
+                          takim2Skor = takim2Skor;
+                        });
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SonucEkrani()),
+                            (route) => false);
+                      },
+                    )
+                  : Text(
+                      seconds.toString() + ' Saniye',
+                      style: TextStyle(color: Colors.black),
+                    )),
         ],
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
@@ -299,6 +338,26 @@ class _OyunEkraniState extends State<OyunEkrani> {
                       children: tabuList(tt),
                     ),
                   ),
+                  FlatButton(
+                    child: Text('Mola..'),
+                    onPressed: () {
+                      assetsAudioPlayerClock.pause();
+                      countdownController.pause();
+                      setState(() {
+                        basladimi = 1;
+                      });
+                    },
+                  ),
+                  FlatButton(
+                      child: Text('Devam'),
+                      onPressed: () {
+                        assetsAudioPlayerClock.play();
+
+                        setState(() {
+                          countdownController.resume();
+                          basladimi = 0;
+                        });
+                      })
                 ],
               ),
             ),

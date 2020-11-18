@@ -1,6 +1,7 @@
 import 'package:Taboo/oyun_ekrani.dart';
 import 'package:Taboo/sonuc_ekrani.dart';
 import 'package:Taboo/toplu_degisimler.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:nice_button/NiceButton.dart';
@@ -51,14 +52,20 @@ class _AyarlarState extends State<Ayarlar> {
           Colors.amber,
         ],
         onPressed: () {
-          _snackbarKey.currentState.showSnackBar(SnackBar(
-            duration: Duration(milliseconds: 500),
-            backgroundColor: Colors.amber,
-            content: Text(
-              'İşlem başarılı.',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-          ));
+          Flushbar(
+            boxShadows: [
+              BoxShadow(
+                  color: Colors.white,
+                  offset: Offset(0.0, 2.0),
+                  blurRadius: 3.0)
+            ],
+            backgroundGradient:
+                LinearGradient(colors: [Colors.blue, Colors.amber]),
+            flushbarPosition: FlushbarPosition.TOP,
+            title: 'İşlem Başarılı',
+            message: 'Başlangıç Ayarlarına Dönüldü.',
+            duration: Duration(seconds: 1),
+          )..show(context);
           setState(() {
             seconds = 60;
             bitisPuani = 20;
